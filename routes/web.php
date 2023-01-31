@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BarangController;
+use App\Http\Controllers\JenisBarangController;
+use App\Models\Barang;
+use App\Models\JenisBarang;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +18,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('layouts.main');
+    return view('dashboard', [
+        'jenisbarang' => JenisBarang::all()->count(),
+        'data' => Barang::sum('jumlah')
+    ]);
+});
+Route::get('/data', [BarangController::class, 'showDataBarang']);
+Route::get('/jenis',  [JenisBarangController::class, 'index']);
+Route::fallback(function () {
+    return view('404');
 });
